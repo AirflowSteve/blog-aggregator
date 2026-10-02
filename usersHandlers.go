@@ -35,7 +35,7 @@ func handlerLogin(s *State, cmd command) error {
 
 func handlerRegister(s *State, cmd command) error {
 	if len(cmd.Args) != 1 {
-		fmt.Errorf("usage: %v <name>", cmd.Name)
+		return fmt.Errorf("usage: %v <name>", cmd.Name)
 
 	}
 
@@ -62,4 +62,28 @@ func handlerRegister(s *State, cmd command) error {
 func printUser(user database.User) {
 	fmt.Printf(" * ID:		%v\n", user.ID)
 	fmt.Printf(" * Name:	%v\n", user.Name)
+}
+func handlerReset(s *State, cmd command) error {
+	err := s.db.Reset(context.Background())
+	if err != nil {
+		return fmt.Errorf("could not reset the table: %w\n", err)
+	}
+	s.config.SetUser("")
+	fmt.Println("the table was reset successfully!")
+	return nil
+}
+
+func handlerGetUsers(s *State, cmd command) error {
+	users, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return fmt.Errorf("couldn't select the users: %w\n", err)
+	}
+	for _, usr := range users {
+		if usr.Name == s.config.CurrentUserName {
+			fmt.Printf("* %s (current)\n", usr.Name)
+		} else {
+			fmt.Printf("* %s\n", usr.Name)
+		}
+	}
+	return nil
 }
