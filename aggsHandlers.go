@@ -10,12 +10,22 @@ import (
 )
 
 func handlerAgg(s *State, cmd command) error {
-	result, err := fetchFeed(context.Background(), "https://www.wagslane.dev/index.xml")
+	if len(cmd.Args) != 1 {
+		return fmt.Errorf("* usage %v <time between requests>\n", cmd.Name)
+	}
+
+	duration, err := time.ParseDuration(cmd.Args[0])
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%+v\n", result)
-	return nil
+
+	fmt.Printf("Collecting feeds every %v\n", duration)
+
+	ticker := time.NewTicker(duration)
+	for ; ; <-ticker.C {
+		scrapeFeeds(s)
+	}
+
 }
 
 func handlerAddFeed(s *State, cmd command, user database.User) error {
