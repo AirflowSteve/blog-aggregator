@@ -9,3 +9,14 @@ VALUES (
     $6
 )
 RETURNING *;
+
+-- name: GetFeeds :many
+SELECT 
+feeds.name,
+feeds.url,
+users.name as users_name
+from feeds
+INNER JOIN users ON users.id = feeds.user_id;
+
+-- name: GetFeedByURL :one
+SELECT * FROM feeds WHERE url = $1;

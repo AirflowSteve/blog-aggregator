@@ -40,6 +40,9 @@ func main() {
 	cmds.register("users", handlerGetUsers)
 	cmds.register("agg", handlerAgg)
 	cmds.register("addfeed", handlerAddFeed)
+	cmds.register("feeds", handlerFeeds)
+	cmds.register("follow", handlerFollow)
+	cmds.register("following", handlerFollowing)
 
 	arguments := os.Args
 	if len(arguments) < 2 {
@@ -57,5 +60,5 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	fmt.Printf("%+v\n", cfg)
+	// fmt.Printf("%+v\n", cfg)
 }
