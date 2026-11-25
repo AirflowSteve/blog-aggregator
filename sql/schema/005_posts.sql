@@ -13,4 +13,4 @@ CREATE TABLE posts (
 
 -- +goose Down
 
--- DROP TABLE posts;
+DROP TABLE posts;
